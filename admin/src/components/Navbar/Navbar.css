@@ -1,13 +1,180 @@
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: #fff; /* Changed from any other color to white */
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px 4%;
-}
-.navbar .logo {
-  width: max(10%, 80px);
+  justify-content: space-between;
+  padding: 0 32px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
 }
 
-.navbar .profile {
-  width: 40px;
+.logo {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.profile {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 3px solid #f3f4f6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile:hover {
+  border-color: #ea580c;
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.2);
+}
+
+.profile:active {
+  transform: scale(0.95);
+}
+
+.navbar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff; /* Changed from rgba or black to white */
+  backdrop-filter: blur(10px);
+  z-index: -1;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 0 24px;
+    height: 65px;
+  }
+  .logo {
+    height: 40px;
+  }
+  .profile {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+    height: 60px;
+  }
+  .logo {
+    height: 36px;
+  }
+  .profile {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 16px;
+    height: 56px;
+  }
+  .logo {
+    height: 32px;
+  }
+  .profile {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .navbar,
+  .navbar::before {
+    background: #fff; /* Override to white in dark mode too */
+    border-bottom-color: #e5e7eb;
+  }
+  .profile {
+    border-color: #4b5563;
+  }
+  .profile:hover {
+    border-color: #ea580c;
+  }
+}
+
+/* Animation Classes */
+.navbar-fade-in {
+  animation: fadeInDown 0.5s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth Scrolling Effect */
+.navbar.scrolled {
+  height: 60px;
+  background: #fff !important;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.scrolled .logo {
+  height: 35px;
+}
+
+.navbar.scrolled .profile {
+  width: 35px;
+  height: 35px;
+}
+
+/* Focus State */
+.logo:focus,
+.profile:focus {
+  outline: 2px solid #ea580c;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Loading State */
+.navbar.loading {
+  opacity: 0.7;
+}
+.navbar.loading .logo,
+.navbar.loading .profile {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Gradient Background Option */
+.navbar.gradient {
+  background: #fff; /* force white if this class is added */
+}
+.navbar.gradient::before {
+  background: #fff;
 }
