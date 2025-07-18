@@ -1,0 +1,379 @@
+/* ===== CSS Variables ===== */
+:root {
+  --sidebar-width: 256px;
+  --sidebar-collapsed-width: 64px;
+  --navbar-height: 70px;
+  --primary-color: #fb923c;
+  --primary-dark: #ea580c;
+  --primary-light: #fed7aa;
+  --text-color: #374151;
+  --border-color: #e5e7eb;
+  --shadow: 0 4px 6px -1px rgba(251, 146, 60, 0.1);
+  --radius: 12px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Main Container - Responsive to Sidebar ===== */
+.list-page {
+  margin-top: var(--navbar-height);
+  margin-left: var(--sidebar-width);
+  min-height: calc(100vh - var(--navbar-height));
+  width: calc(100% - var(--sidebar-width));
+  background: #fff7ed;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: var(--transition);
+}
+
+/* ===== Sidebar Collapsed State ===== */
+.list-page.sidebar-collapsed {
+  margin-left: var(--sidebar-collapsed-width);
+  width: calc(100% - var(--sidebar-collapsed-width));
+}
+
+/* ===== Mobile View ===== */
+.list-page.mobile-view {
+  margin-left: 0;
+  width: 100%;
+  padding: 1rem 0.5rem;
+}
+
+/* ===== Page Title ===== */
+.list-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: -0.025em;
+  text-shadow: 0 2px 4px rgba(251, 146, 60, 0.1);
+  transition: var(--transition);
+}
+
+/* ===== Table Container ===== */
+.list-table-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+/* Expand table when sidebar is collapsed */
+.list-page.sidebar-collapsed .list-table-container {
+  max-width: 1400px;
+}
+
+/* ===== Table Styling ===== */
+.list-table {
+  width: 100%;
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-width: 600px;
+}
+
+/* ===== Table Rows ===== */
+.list-table-format {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px 100px 80px;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  color: var(--text-color);
+  transition: var(--transition);
+}
+
+/* Expand grid when sidebar is collapsed */
+.list-page.sidebar-collapsed .list-table-format {
+  grid-template-columns: 100px 1.5fr 150px 120px 100px;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+}
+
+.list-table-format:hover:not(.list-table-header) {
+  background-color: #fef3e2;
+}
+
+.list-table-format:last-child {
+  border-bottom: none;
+}
+
+/* ===== Table Header ===== */
+.list-table-header {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--primary-dark) 100%
+  );
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  border-bottom: none;
+}
+
+.list-table-header:hover {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--primary-dark) 100%
+  );
+}
+
+/* ===== Images ===== */
+.list-table-format img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--primary-light);
+  transition: var(--transition);
+  justify-self: center;
+}
+
+/* Larger images when sidebar is collapsed */
+.list-page.sidebar-collapsed .list-table-format img {
+  width: 80px;
+  height: 80px;
+}
+
+.list-table-format img:hover {
+  transform: scale(1.05);
+  border-color: var(--primary-color);
+}
+
+/* ===== Text Styling ===== */
+.list-table-format p {
+  margin: 0;
+  font-weight: 500;
+  text-align: center;
+  transition: var(--transition);
+}
+
+/* Delete button styling */
+.delete-btn {
+  color: #dc2626;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+}
+
+.delete-btn:hover {
+  color: white;
+  background-color: #dc2626;
+  transform: scale(1.1);
+}
+
+/* Price styling */
+.list-table-format p:nth-child(4) {
+  color: var(--primary-dark);
+  font-weight: 600;
+  background: var(--primary-light);
+  padding: 0.5rem;
+  border-radius: 6px;
+  display: inline-block;
+  justify-self: center;
+}
+
+/* ===== Responsive Design ===== */
+
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .list-page.sidebar-collapsed .list-table-container {
+    max-width: 1600px;
+  }
+}
+
+/* Large Tablets (1024px - 1200px) */
+@media (max-width: 1200px) and (min-width: 1024px) {
+  .list-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .list-title {
+    font-size: 2rem;
+  }
+
+  .list-table-container {
+    max-width: 95vw;
+  }
+
+  .list-page.sidebar-collapsed .list-table-container {
+    max-width: 98vw;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (max-width: 1023px) {
+  .list-page {
+    margin-left: 0;
+    width: 100%;
+    padding: 1rem 0.5rem;
+  }
+
+  .list-title {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .list-table-format {
+    grid-template-columns: 60px 1fr 100px 80px 60px;
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .list-table-format img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .list-table-container {
+    max-width: 98vw;
+  }
+}
+
+/* Mobile Phones (480px - 767px) */
+@media (max-width: 767px) {
+  .list-page {
+    padding: 0.75rem 0.25rem;
+  }
+
+  .list-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .list-table {
+    min-width: 450px;
+  }
+
+  .list-table-format {
+    grid-template-columns: 50px 1fr 80px 70px 40px;
+    padding: 0.5rem 0.75rem;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .list-table-format img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .list-table-header {
+    font-size: 0.75rem;
+  }
+
+  .list-table-format p:nth-child(4) {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Small Mobile (360px - 479px) */
+@media (max-width: 479px) {
+  .list-page {
+    padding: 0.5rem 0.125rem;
+  }
+
+  .list-title {
+    font-size: 1.25rem;
+  }
+
+  .list-table-format {
+    grid-template-columns: 40px 1fr 70px 60px 30px;
+    padding: 0.4rem 0.5rem;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+  }
+
+  .list-table-format img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .delete-btn {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ===== Scrollbar Styling ===== */
+.list-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.list-table-container::-webkit-scrollbar-track {
+  background: var(--primary-light);
+  border-radius: 4px;
+}
+
+.list-table-container::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+.list-table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* ===== Loading and Empty States ===== */
+.list-table-format.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--primary-dark);
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+/* ===== Smooth Transitions ===== */
+.list-page,
+.list-table-container,
+.list-table-format,
+.list-table-format img,
+.list-title {
+  transition: var(--transition);
+}
+
+/* ===== Print Styles ===== */
+@media print {
+  .list-page {
+    margin: 0;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .delete-btn {
+    display: none;
+  }
+}
