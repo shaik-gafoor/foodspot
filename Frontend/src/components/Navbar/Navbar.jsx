@@ -1,26 +1,35 @@
 import { assets } from "../../assets/assets";
 import "./Navbar.css";
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
-import AppDownload from "../AppDownload/AppDownload";
-import Cart from "../../pages/Cart/Cart";
+import { Menu, X, User, ShoppingBag, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { StoreContext } from "../../Context/StoreContext";
 
 function Navbar({ setShowLogin }) {
   const [line, setLine] = useState("home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+
   const menuRef = useRef(null);
+  const profileRef = useRef(null);
+
+  const navigate = useNavigate();
+  const { getTotalCartAmount, token, setToken } = useContext(StoreContext);
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken("");
+    navigate("/");
+  };
 
   const toggleMenu = () => {
     const menu = menuRef.current;
     if (!menu) return;
-
     if (isMenuOpen) {
       menu.style.maxHeight = "0px";
       setIsMenuOpen(false);
     } else {
-      menu.style.maxHeight = "300px";
+      menu.style.maxHeight = "500px";
       setIsMenuOpen(true);
     }
   };
@@ -48,6 +57,10 @@ function Navbar({ setShowLogin }) {
           setIsMenuOpen(false);
         }
       }
+
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -73,11 +86,21 @@ function Navbar({ setShowLogin }) {
     };
   }, [isMenuOpen]);
 
-  const { getTotalCartAmount } = useContext(StoreContext);
+  const handleOrdersClick = () => {
+    setProfileOpen(false);
+    navigate("/orders");
+  };
+
+  const toggleProfileDropdown = (e) => {
+    e.stopPropagation();
+    setProfileOpen(!profileOpen);
+  };
 
   return (
     <div className="navbar">
-      <img src={assets.logo} alt="logo" className="logo" />
+      <Link to="/">
+        <img src={assets.logo} alt="logo" className="logo" />
+      </Link>
 
       <ul className="navbar-menu" ref={menuRef}>
         <li>
@@ -93,7 +116,7 @@ function Navbar({ setShowLogin }) {
           <a
             href="#explore-menu"
             onClick={() => handleMenuItemClick("menu")}
-            className={`menuaitem ${line === "menu" ? "active" : ""}`}
+            className={`menu-item ${line === "menu" ? "active" : ""}`}
           >
             Menu
           </a>
@@ -117,20 +140,76 @@ function Navbar({ setShowLogin }) {
           </a>
         </li>
         <li>
-          <button onClick={() => setShowLogin(true)}>Sign Up</button>
+          {!token && (
+            <button onClick={() => setShowLogin(true)} className="sign-in-btn">
+              Sign In
+            </button>
+          )}
         </li>
       </ul>
 
       <div className="navbar-right">
-        <Link to="/">
+        <Link to="/" className="nav-icon">
           <img src={assets.search_icon} alt="search" />
         </Link>
+
         <div className="navbar-search-icon">
-          <Link to="/cart">
+          <Link to="/cart" className="nav-icon">
             <img src={assets.basket_icon} alt="basket" />
           </Link>
           <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
         </div>
+
+        {token && (
+          <div className="navbar-profile-right" ref={profileRef}>
+            <div
+              className="profile-trigger-right"
+              onClick={toggleProfileDropdown}
+            >
+              {assets.profile_icon ? (
+                <img
+                  src={assets.profile_icon}
+                  alt="Profile"
+                  className="profile-img-right"
+                />
+              ) : (
+                <div className="profile-icon-fallback-right">
+                  <User size={22} />
+                </div>
+              )}
+            </div>
+            <div
+              className={`nav-profile-dropdown-right ${
+                profileOpen ? "show" : ""
+              }`}
+            >
+              <div className="dropdown-item-right" onClick={handleOrdersClick}>
+                {assets.bag_icon ? (
+                  <img src={assets.bag_icon} alt="Orders" />
+                ) : (
+                  <ShoppingBag size={18} />
+                )}
+                <span>Orders</span>
+              </div>
+              <div className="dropdown-divider-right"></div>
+              <div
+                className="dropdown-item-right"
+                onClick={() => {
+                  setProfileOpen(false);
+                  logout();
+                }}
+              >
+                {assets.logout_icon ? (
+                  <img src={assets.logout_icon} alt="Logout" />
+                ) : (
+                  <LogOut size={18} />
+                )}
+                <span>Logout</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {isMenuOpen ? (
           <X className="menu-icon" onClick={toggleMenu} />
         ) : (
