@@ -1,13 +1,12 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import Stripe from "stripe";
+import mongoose from "mongoose";
+import Order from "../models/orderModel.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const placeOrder = async (req, res) => {
-  console.log("Backend: placeOrder called");
-  console.log("Request body:", JSON.stringify(req.body, null, 2));
-
   const frontend_url = "http://localhost:5173";
   try {
     if (!req.body.items || !req.body.items.length) {
@@ -94,4 +93,30 @@ const verifyOrder = async (req, res) => {
   }
 };
 
-export { placeOrder, verifyOrder };
+//user orders for frontend
+
+const userOrders = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    console.log("user icd is", userId);
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "UserId required" });
+    }
+
+    const orders = await Order.find({ userId });
+    console.log("Orders are:", orders);
+
+    res.status(200).json({ success: true, data: orders });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export default userOrders;
+
+export { placeOrder, verifyOrder, userOrders };

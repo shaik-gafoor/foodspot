@@ -7,7 +7,8 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer.jsx";
 import { useState } from "react";
-import verify from "./pages/verify/verify";
+import Verify from "./pages/verify/Verify.jsx";
+import MyOrders from "./pages/MyOrders/MyOrders.jsx";
 import LoginPopup from "./components/LoginPopup/LoginPopup.jsx";
 
 const App = () => {
@@ -22,7 +23,8 @@ const App = () => {
           <Route path="/" element={<Home />}></Route>
           <Route path="/cart" element={<Cart />}></Route>
           <Route path="/order" element={<PlaceOrder />}></Route>
-          <Route path="/verify" element={<verify />}></Route>
+          <Route path="/verify" element={<Verify />}></Route>
+          <Route path="/myorders" element={<MyOrders />}></Route>
         </Routes>
       </div>
       <Footer />

@@ -1,17 +1,17 @@
 import React, { useContext, useEffect } from "react";
-import "./verify.css";
+import "./Verify.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { StoreContext } from "../../Context/StoreContext";
 import axios from "axios";
 
-const verify = () => {
+const Verify = () => {
   const [searchParams, setParams] = useSearchParams();
   const success = searchParams.get("success");
   const orderId = searchParams.get("orderId");
   const { url } = useContext(StoreContext);
   const navigate = useNavigate();
 
-  const verifyPayment = async () => {
+  const VerifyPayment = async () => {
     const response = await axios.post(url + "/api/order/verify", {
       success,
       orderId,
@@ -24,7 +24,7 @@ const verify = () => {
   };
 
   useEffect(() => {
-    verifyPayment();
+    VerifyPayment();
   }, []);
 
   return (
@@ -34,4 +34,4 @@ const verify = () => {
   );
 };
 
-export default verify;
+export default Verify;
