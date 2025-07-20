@@ -7,7 +7,9 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer.jsx";
 import { useState } from "react";
+import verify from "./pages/verify/verify";
 import LoginPopup from "./components/LoginPopup/LoginPopup.jsx";
+
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
   return (
@@ -20,6 +22,7 @@ const App = () => {
           <Route path="/" element={<Home />}></Route>
           <Route path="/cart" element={<Cart />}></Route>
           <Route path="/order" element={<PlaceOrder />}></Route>
+          <Route path="/verify" element={<verify />}></Route>
         </Routes>
       </div>
       <Footer />

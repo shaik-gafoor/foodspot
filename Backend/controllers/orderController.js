@@ -61,22 +61,6 @@ const placeOrder = async (req, res) => {
     //   process.env.STRIPE_SECRET_KEY ? "SET" : "NOT SET"
     // );
 
-    const verifyOrder = async (req, res) => {
-      const { orderId, success } = req.body;
-      try {
-        if (success == "true") {
-          await orderModel.findByIdAndUpdate(orderId, { payment: true });
-          res.json({ success: true, message: "paid" });
-        } else {
-          await orderModel.findByIdAndDelete(orderId);
-          res.json({ success: false, message: "Not Paid" });
-        }
-      } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: "Error" });
-      }
-    };
-
     console.log("Creating Stripe session...");
     const session = await stripe.checkout.sessions.create({
       line_items,
@@ -92,6 +76,21 @@ const placeOrder = async (req, res) => {
     res
       .status(500)
       .json({ success: false, message: "Error", error: error.message });
+  }
+};
+const verifyOrder = async (req, res) => {
+  const { orderId, success } = req.body;
+  try {
+    if (success == "true") {
+      await orderModel.findByIdAndUpdate(orderId, { payment: true });
+      res.json({ success: true, message: "paid" });
+    } else {
+      await orderModel.findByIdAndDelete(orderId);
+      res.json({ success: false, message: "Not Paid" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Error" });
   }
 };
 
