@@ -162,94 +162,17 @@
   color: white;
 }
 
+/* ✅ NEW: Email @ symbol styling */
+.email-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  font-family: "Arial", sans-serif;
+}
+
 .contact-text {
   color: #d1d5db;
   font-size: 0.875rem;
-}
-
-/* Newsletter Section */
-.footer-newsletter {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid #374151;
-}
-
-.newsletter-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-  text-align: center;
-}
-
-@media (min-width: 768px) {
-  .newsletter-content {
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: left;
-  }
-}
-
-.newsletter-info h4 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: white;
-  margin: 0 0 0.5rem 0;
-}
-
-.newsletter-info p {
-  color: #9ca3af;
-  font-size: 0.875rem;
-  margin: 0;
-}
-
-.newsletter-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .newsletter-form {
-    flex-direction: row;
-  }
-}
-
-.newsletter-input {
-  padding: 0.5rem 1rem;
-  background-color: #374151;
-  border: 1px solid #4b5563;
-  border-radius: 0.5rem;
-  color: white;
-  font-size: 0.875rem;
-  outline: none;
-  transition: all 0.3s ease;
-  min-width: 200px;
-}
-
-.newsletter-input::placeholder {
-  color: #9ca3af;
-}
-
-.newsletter-input:focus {
-  border-color: #f97316;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
-}
-
-.newsletter-button {
-  padding: 0.5rem 1.5rem;
-  background-color: #f97316;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.newsletter-button:hover {
-  background-color: #ea580c;
 }
 
 /* Bottom Bar */
@@ -314,15 +237,6 @@
   .footer-social-icons {
     justify-content: center;
   }
-
-  .newsletter-form {
-    width: 100%;
-  }
-
-  .newsletter-input {
-    min-width: auto;
-    width: 100%;
-  }
 }
 
 /* Animation for smooth scrolling */
@@ -331,9 +245,7 @@
 }
 
 /* Accessibility improvements */
-.footer a:focus,
-.footer button:focus,
-.footer input:focus {
+.footer a:focus {
   outline: 2px solid #f97316;
   outline-offset: 2px;
 }
@@ -345,8 +257,7 @@
     color: black !important;
   }
 
-  .footer-social-icons,
-  .newsletter-form {
+  .footer-social-icons {
     display: none;
   }
 }
