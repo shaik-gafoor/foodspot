@@ -86,9 +86,10 @@ function Navbar({ setShowLogin }) {
     };
   }, [isMenuOpen]);
 
+  // ✅ FIXED: Updated handleOrdersClick to navigate to /myorders
   const handleOrdersClick = () => {
     setProfileOpen(false);
-    navigate("/orders");
+    navigate("/myorders");
   };
 
   const toggleProfileDropdown = (e) => {
@@ -183,6 +184,7 @@ function Navbar({ setShowLogin }) {
                 profileOpen ? "show" : ""
               }`}
             >
+              {/* ✅ FIXED: Removed duplicate onClick handlers */}
               <div className="dropdown-item-right" onClick={handleOrdersClick}>
                 {assets.bag_icon ? (
                   <img src={assets.bag_icon} alt="Orders" />
