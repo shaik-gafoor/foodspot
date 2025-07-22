@@ -130,7 +130,7 @@ const MyOrders = () => {
               </div>
 
               <div className="order-actions">
-                <button className="track-btn">
+                <button className="track-btn" onClick={fetchOrders}>
                   <span>📍</span>
                   Track Order
                 </button>
