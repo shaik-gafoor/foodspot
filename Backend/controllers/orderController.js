@@ -9,6 +9,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const placeOrder = async (req, res) => {
   const frontend_url = "http://localhost:5173";
   try {
+    // ✅ CRITICAL FIX: Get userId from middleware
+    const userId = req.userId; // This was missing!
+
+    // Add debug logging
+    console.log("UserId from middleware:", userId);
+    console.log("Request body:", req.body);
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "User not authenticated",
+      });
+    }
+
     if (!req.body.items || !req.body.items.length) {
       return res
         .status(400)
@@ -17,17 +31,16 @@ const placeOrder = async (req, res) => {
 
     console.log("Saving order to database...");
     const newOrder = new orderModel({
-      userId: req.body.userId,
+      userId: userId, // ✅ FIXED: Now using userId from middleware
       items: req.body.items,
       amount: req.body.amount,
       address: req.body.address,
     });
     await newOrder.save();
 
-    if (req.body.userId) {
-      await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
-      console.log("Cart cleared for user");
-    }
+    // ✅ FIXED: Use userId from middleware, not req.body.userId
+    await userModel.findByIdAndUpdate(userId, { cartData: {} });
+    console.log("Cart cleared for user");
 
     const line_items = req.body.items.map((item) => ({
       price_data: {
@@ -51,12 +64,6 @@ const placeOrder = async (req, res) => {
       quantity: 1,
     });
 
-    // console.log("Stripe line_items:", JSON.stringify(line_items, null, 2));
-    // console.log(
-    //   "Using Stripe key:",
-    //   process.env.STRIPE_SECRET_KEY ? "SET" : "NOT SET"
-    // );
-
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: "payment",
@@ -66,11 +73,13 @@ const placeOrder = async (req, res) => {
 
     res.json({ success: true, session_url: session.url });
   } catch (error) {
+    console.error("Place order error:", error);
     res
       .status(500)
       .json({ success: false, message: "Error", error: error.message });
   }
 };
+
 const verifyOrder = async (req, res) => {
   const { orderId, success } = req.body;
   try {
@@ -87,26 +96,25 @@ const verifyOrder = async (req, res) => {
   }
 };
 
-//user orders for frontend
-
 const userOrders = async (req, res) => {
   try {
-    const { userId } = req.body;
+    console.log("Decoded userId from middleware:", req.userId);
 
+    const userId = req.userId;
     if (!userId) {
       return res
         .status(400)
         .json({ success: false, message: "UserId required" });
     }
 
-    const orders = await Order.find({ userId: req.body.userId });
+    const orders = await Order.find({ userId }).sort({ createdAt: -1 });
+
+    console.log("Orders found:", orders);
     res.json({ success: true, data: orders });
   } catch (error) {
-    console.error("Error fetching orders:", error);
-    res.json({ success: false, message: "Internal Server Error" });
+    console.error("Error fetching orders:", error.message, error.stack);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
-
-export default userOrders;
 
 export { placeOrder, verifyOrder, userOrders };
