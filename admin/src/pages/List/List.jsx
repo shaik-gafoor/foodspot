@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 const List = ({ url }) => {
   const [list, setList] = useState([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   const fetchList = async () => {
     try {
@@ -21,23 +20,50 @@ const List = ({ url }) => {
     }
   };
 
-  // Check screen size and sidebar state
+  // Detect sidebar state changes
   useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 1024);
+    const detectSidebarState = () => {
+      // Method 1: Check for collapsed sidebar class
+      const sidebar = document.querySelector('.sidebar, [class*="sidebar"]');
+      if (sidebar) {
+        const isCollapsed =
+          sidebar.classList.contains("collapsed") ||
+          sidebar.classList.contains("minimized") ||
+          sidebar.offsetWidth < 150;
+        setSidebarCollapsed(isCollapsed);
+      }
     };
 
-    const handleSidebarToggle = (event) => {
-      setSidebarCollapsed(event.detail.collapsed);
+    // Initial detection
+    detectSidebarState();
+
+    // Create mutation observer to watch for sidebar changes
+    const observer = new MutationObserver(() => {
+      setTimeout(detectSidebarState, 50); // Small delay to ensure DOM updates
+    });
+
+    // Observe changes to the body and sidebar
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
+
+    // Listen for window resize
+    window.addEventListener("resize", detectSidebarState);
+
+    // Listen for custom sidebar toggle events (if your app dispatches them)
+    const handleSidebarToggle = () => {
+      setTimeout(detectSidebarState, 100);
     };
 
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-    window.addEventListener("sidebarToggle", handleSidebarToggle);
+    document.addEventListener("sidebarToggle", handleSidebarToggle);
 
     return () => {
-      window.removeEventListener("resize", checkScreenSize);
-      window.removeEventListener("sidebarToggle", handleSidebarToggle);
+      observer.disconnect();
+      window.removeEventListener("resize", detectSidebarState);
+      document.removeEventListener("sidebarToggle", handleSidebarToggle);
     };
   }, []);
 
@@ -56,11 +82,7 @@ const List = ({ url }) => {
   }, []);
 
   return (
-    <div
-      className={`list-page ${sidebarCollapsed ? "sidebar-collapsed" : ""} ${
-        isMobile ? "mobile-view" : ""
-      }`}
-    >
+    <div className={`list-page ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}>
       <p className="list-title">All Foods List</p>
       <div className="list-table-container">
         <div className="list-table">
