@@ -9,7 +9,6 @@ import { ToastContainer } from "react-toastify";
 
 const App = () => {
   const url = import.meta.env.VITE_API_URL;
-
   return (
     <div>
       <ToastContainer />

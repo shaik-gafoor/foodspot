@@ -9,11 +9,14 @@ import orderRouter from "./routes/orderRoute.js";
 
 //app config
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 //middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://foodspotonline.netlify.app' // allow your frontend domain only
+}));
+
 
 //db conection
 connectDB();
