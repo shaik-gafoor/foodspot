@@ -123,12 +123,8 @@ function Navbar({ setShowLogin }) {
           </a>
         </li>
         <li>
-          <a
-            href="#app-download"
-            onClick={() => handleMenuItemClick("mobile-app")}
-            className={`menu-item ${line === "mobile-app" ? "active" : ""}`}
-          >
-            Mobile-App
+          <a href="#app-download" className={`menu-item`}>
+            Access Admin Page
           </a>
         </li>
         <li>
