@@ -13,10 +13,14 @@ const port = process.env.PORT || 4000;
 
 //middleware
 app.use(express.json());
-app.use(cors({
-  origin: 'https://foodspotonline.netlify.app' // allow your frontend domain only
-}));
-
+app.use(
+  cors({
+    origin: [
+      "https://foodspotonline.netlify.app",
+      "https://foodspotadmin.netlify.app",
+    ], // allow your frontend domain only
+  })
+);
 
 //db conection
 connectDB();
