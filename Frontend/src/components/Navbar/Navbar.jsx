@@ -45,6 +45,23 @@ function Navbar({ setShowLogin }) {
     }
   };
 
+  // ✅ NEW: Handle Admin Page Navigation
+  const handleAdminPageClick = () => {
+    // Store current location for potential back navigation
+    localStorage.setItem("previousPage", window.location.href);
+    // Navigate to admin page
+    window.open("https://foodspotadmin.netlify.app/", "_blank");
+
+    // Close mobile menu if open
+    if (window.innerWidth <= 768 && isMenuOpen) {
+      const menu = menuRef.current;
+      if (menu) {
+        menu.style.maxHeight = "0px";
+        setIsMenuOpen(false);
+      }
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -86,7 +103,6 @@ function Navbar({ setShowLogin }) {
     };
   }, [isMenuOpen]);
 
-  // ✅ FIXED: Updated handleOrdersClick to navigate to /myorders
   const handleOrdersClick = () => {
     setProfileOpen(false);
     navigate("/myorders");
@@ -123,9 +139,12 @@ function Navbar({ setShowLogin }) {
           </a>
         </li>
         <li>
-          <a href="#app-download" className={`menu-item`}>
+          <button
+            onClick={handleAdminPageClick}
+            className="menu-item admin-page-btn"
+          >
             Access Admin Page
-          </a>
+          </button>
         </li>
         <li>
           <a
@@ -180,7 +199,6 @@ function Navbar({ setShowLogin }) {
                 profileOpen ? "show" : ""
               }`}
             >
-              {/* ✅ FIXED: Removed duplicate onClick handlers */}
               <div className="dropdown-item-right" onClick={handleOrdersClick}>
                 {assets.bag_icon ? (
                   <img src={assets.bag_icon} alt="Orders" />
